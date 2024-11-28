@@ -169,10 +169,8 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							"var name = pm.variables.replaceIn(\"userFirstName\");",
-							"pm.collectionVariables.set(\"userFirstName\", name);",
-							"var lastName = pm.variables.replaceIn(\"userLastName\");",
-							"pm.collectionVariables.set(\"userLastName\", lastName);",
+							"var firstName = pm.iterationData.get(\"userFirstName\");",
+							"var lastName = pm.iterationData.get(\"userLastName\");",
 							"pm.collectionVariables.set(\"country\", \"Ukraine\");"
 						],
 						"type": "text/javascript",
