@@ -169,9 +169,9 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							"var name = pm.variables.replaceIn(\"{{$randomFirstName}}\");",
+							"var name = pm.variables.replaceIn(\"userFirstName\");",
 							"pm.collectionVariables.set(\"userFirstName\", name);",
-							"var lastName = pm.variables.replaceIn(\"{{$randomLastName}}\");",
+							"var lastName = pm.variables.replaceIn(\"userLastName\");",
 							"pm.collectionVariables.set(\"userLastName\", lastName);",
 							"pm.collectionVariables.set(\"country\", \"Ukraine\");"
 						],
