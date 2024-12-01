@@ -1,0 +1,11 @@
+userFirstName,userLastName,userEmail,defaultPassword,repeatPassword,url
+Viktor,Pavlik,pavlik@mail.com,myPassword1234,myPassword1234,https://qauto.forstudy.space/api
+,Pavlik,pavlik@mail.com,myPassword1234,myPassword1234,https://qauto.forstudy.space/api
+Viktor,,pavlik@mail.com,myPassword1234,myPassword1234,https://qauto.forstudy.space/api
+Viktor,Pavlik,,myPassword1234,myPassword1234,https://qauto.forstudy.space/api
+Viktor,Pavlik,pavvvlik,myPassword1234,myPassword1234,https://qauto.forstudy.space/api
+Viktor,Pavlik,pavlik@mail.com,,myPassword1234,https://qauto.forstudy.space/api
+Viktor,Pavlik,pavlik@mail.com,my,myPassword1234,https://qauto.forstudy.space/api
+Viktor,Pavlik,pavlik@mail.com,myPassword1234!@#$%,myPassword1234,https://qauto.forstudy.space/api
+Viktor,Pavlik,pavlik@mail.com,1234567890,myPassword1234,https://qauto.forstudy.space/api
+Viktor,Pavlik,pavlik@mail.com,myPassword1234,1234myPassword,https://qauto.forstudy.space/api

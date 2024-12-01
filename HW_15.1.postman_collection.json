@@ -1,0 +1,1139 @@
+{
+	"info": {
+		"_postman_id": "d8018513-7559-4c1f-ab23-a44d4afcd7a3",
+		"name": "HW_15.1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "39096056"
+	},
+	"item": [
+		{
+			"name": "Test Signup",
+			"item": [
+				{
+					"name": "Test Signup",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test(\"New user is created\", function () {",
+									"    if (pm.response.code === 201) {",
+									"        pm.collectionVariables.set(\"userId\", jsonData.data.userId);",
+									"    }",
+									"    else{",
+									"        pm.execution.setNextRequest(\"Test first name is empty\");",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var firstName = pm.iterationData.get(\"userFirstName\");",
+									"var lastName = pm.iterationData.get(\"userLastName\");",
+									"var email = pm.iterationData.get(\"userEmail\");",
+									"var password = pm.iterationData.get(\"defaultPassword\");",
+									"var repeatPassword = pm.iterationData.get(\"repeatPassword\");",
+									"",
+									"pm.test(\"User's first name is not empty and is a string\", function () {",
+									"    pm.expect(firstName).to.not.be.empty;",
+									"    pm.expect(typeof firstName).to.eql(\"string\")",
+									"});",
+									"",
+									"pm.test(\"User's last name is not empty and is a string\", function () {",
+									"    pm.expect(lastName).to.not.be.empty;",
+									"    pm.expect(typeof lastName).to.eql(\"string\")",
+									"});",
+									"",
+									"pm.test(\"User's email is valid\", function () {   ",
+									"    pm.expect(email).to.not.be.empty;",
+									"    pm.expect(email).to.match(/^[a-zA-Z0-9]+([._-][a-zA-Z0-9]+)*@[a-z0-9-]+\\.[a-z]{2,}$/);",
+									"});",
+									"",
+									"pm.test(\"The password is not empty and meets length requirement\", function () {",
+									"    pm.expect(password).to.not.be.empty;",
+									"    pm.expect(password).to.match(/^[a-zA-Z0-9]|[a-zA-Z\\W]$/);",
+									"});",
+									"",
+									"pm.test(\"The repeatPassword matches the password\", function () {",
+									"    pm.expect(repeatPassword).to.not.be.empty;",
+									"    pm.expect(repeatPassword).to.eql(password);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{userFirstName}}\",\n    \"lastName\": \"{{userLastName}}\",\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{defaultPassword}}\",\n    \"repeatPassword\": \"{{repeatPassword}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/auth/signup",
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "Test first name is empty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test(\"First name is empty\", function () {",
+									"    if (pm.response.code === 400) {",
+									"        pm.expect(jsonData.message).to.include(\"\\\"name\\\" is not allowed to be empty\");",
+									"    }",
+									"    else{",
+									"        pm.execution.setNextRequest(\"Test last name is empty\");",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var firstName = pm.iterationData.get(\"userFirstName\");",
+									"var lastName = pm.iterationData.get(\"userLastName\");",
+									"var email = pm.iterationData.get(\"userEmail\");",
+									"var password = pm.iterationData.get(\"defaultPassword\");",
+									"var repeatPassword = pm.iterationData.get(\"repeatPassword\");",
+									"",
+									"pm.test(\"User's first name is not filled in\", function () {",
+									"    pm.expect(firstName).to.be.empty;",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{userFirstName}}\",\n    \"lastName\": \"{{userLastName}}\",\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{defaultPassword}}\",\n    \"repeatPassword\": \"{{repeatPassword}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/auth/signup",
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "Test last name is empty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Last name is empty\", function () {",
+									"    if (pm.response.code === 400) {",
+									"        pm.expect(jsonData.message).to.include(\"\\\"lastName\\\" is not allowed to be empty\");",
+									"    }",
+									"    else{",
+									"        pm.execution.setNextRequest(\"Test email is empty\");",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var firstName = pm.iterationData.get(\"userFirstName\");",
+									"var lastName = pm.iterationData.get(\"userLastName\");",
+									"var email = pm.iterationData.get(\"userEmail\");",
+									"var password = pm.iterationData.get(\"defaultPassword\");",
+									"var repeatPassword = pm.iterationData.get(\"repeatPassword\");",
+									"",
+									"pm.test(\"User's last name is not filled in\", function () {",
+									"    pm.expect(lastName).to.be.empty;",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{userFirstName}}\",\n    \"lastName\": \"{{userLastName}}\",\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{defaultPassword}}\",\n    \"repeatPassword\": \"{{repeatPassword}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/auth/signup",
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "Test email is empty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Email is empty\", function () {",
+									"    if (pm.response.code === 400) {",
+									"        pm.expect(jsonData.message).to.include(\"\\\"email\\\" is not allowed to be empty\");",
+									"    }",
+									"    else{",
+									"        pm.execution.setNextRequest(\"Test email is invalid\");",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var firstName = pm.iterationData.get(\"userFirstName\");",
+									"var lastName = pm.iterationData.get(\"userLastName\");",
+									"var email = pm.iterationData.get(\"userEmail\");",
+									"var password = pm.iterationData.get(\"defaultPassword\");",
+									"var repeatPassword = pm.iterationData.get(\"repeatPassword\");",
+									"",
+									"pm.test(\"User's email is not filled in\", function () {   ",
+									"    pm.expect(email).to.be.empty;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{userFirstName}}\",\n    \"lastName\": \"{{userLastName}}\",\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{defaultPassword}}\",\n    \"repeatPassword\": \"{{repeatPassword}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/auth/signup",
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "Test email is invalid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Email is invalid\", function () {",
+									"    if (pm.response.code === 400) {",
+									"        pm.expect(jsonData.message).to.include(\"Email is incorrect\");",
+									"    }",
+									"    else{",
+									"        pm.execution.setNextRequest(\"Test password is empty\");",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var firstName = pm.iterationData.get(\"userFirstName\");",
+									"var lastName = pm.iterationData.get(\"userLastName\");",
+									"var email = pm.iterationData.get(\"userEmail\");",
+									"var password = pm.iterationData.get(\"defaultPassword\");",
+									"var repeatPassword = pm.iterationData.get(\"repeatPassword\");",
+									"",
+									"pm.test(\"User's email is invalid\", function () {   ",
+									"    pm.expect(email).to.not.be.empty;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{userFirstName}}\",\n    \"lastName\": \"{{userLastName}}\",\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{defaultPassword}}\",\n    \"repeatPassword\": \"{{repeatPassword}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/auth/signup",
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "Test password is empty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Password is empty\", function () {",
+									"    if (pm.response.code === 400) {",
+									"        pm.expect(jsonData.message).to.include(\"\\\"password\\\" is not allowed to be empty\");",
+									"    }",
+									"    else{",
+									"        pm.execution.setNextRequest(\"Test password is too short\");",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var firstName = pm.iterationData.get(\"userFirstName\");",
+									"var lastName = pm.iterationData.get(\"userLastName\");",
+									"var email = pm.iterationData.get(\"userEmail\");",
+									"var password = pm.iterationData.get(\"defaultPassword\");",
+									"var repeatPassword = pm.iterationData.get(\"repeatPassword\");",
+									"",
+									"pm.test(\"User's password is not filled in\", function () {",
+									"    pm.expect(password).to.be.empty;",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{userFirstName}}\",\n    \"lastName\": \"{{userLastName}}\",\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{defaultPassword}}\",\n    \"repeatPassword\": \"{{repeatPassword}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/auth/signup",
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "Test password is too short",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Password is too short\", function () {",
+									"    if (pm.response.code === 400) {",
+									"        pm.expect(jsonData.message).to.include(\"Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter\");",
+									"    }",
+									"    else{",
+									"        pm.execution.setNextRequest(\"Test password is too long\");",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var firstName = pm.iterationData.get(\"userFirstName\");",
+									"var lastName = pm.iterationData.get(\"userLastName\");",
+									"var email = pm.iterationData.get(\"userEmail\");",
+									"var password = pm.iterationData.get(\"defaultPassword\");",
+									"var repeatPassword = pm.iterationData.get(\"repeatPassword\");",
+									"",
+									"pm.test(\"The password is too short\", function () {",
+									"    pm.expect(password).to.not.be.empty;",
+									"    pm.expect(password).to.match(/^[a-zA-Z0-9]|[a-zA-Z\\W]{0,7}$/);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{userFirstName}}\",\n    \"lastName\": \"{{userLastName}}\",\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{defaultPassword}}\",\n    \"repeatPassword\": \"{{repeatPassword}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/auth/signup",
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "Test password is too long",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Password is too long\", function () {",
+									"    if (pm.response.code === 400) {",
+									"        pm.expect(jsonData.message).to.include(\"Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter\");",
+									"    }",
+									"    else{",
+									"        pm.execution.setNextRequest(\"Test password has no letters\");",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var firstName = pm.iterationData.get(\"userFirstName\");",
+									"var lastName = pm.iterationData.get(\"userLastName\");",
+									"var email = pm.iterationData.get(\"userEmail\");",
+									"var password = pm.iterationData.get(\"defaultPassword\");",
+									"var repeatPassword = pm.iterationData.get(\"repeatPassword\");",
+									"",
+									"pm.test(\"The password is too long\", function () {",
+									"    pm.expect(password).to.not.be.empty;",
+									"    pm.expect(password).to.match(/^[a-zA-Z0-9]|[a-zA-Z\\W]{0,7}$/);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{userFirstName}}\",\n    \"lastName\": \"{{userLastName}}\",\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{defaultPassword}}\",\n    \"repeatPassword\": \"{{repeatPassword}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/auth/signup",
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "Test password has no letters",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Password has no letters\", function () {",
+									"    if (pm.response.code === 400) {",
+									"        pm.expect(jsonData.message).to.include(\"Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter\");",
+									"    }",
+									"    else{",
+									"        pm.execution.setNextRequest(\"Test repeat password does not match password\");",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var firstName = pm.iterationData.get(\"userFirstName\");",
+									"var lastName = pm.iterationData.get(\"userLastName\");",
+									"var email = pm.iterationData.get(\"userEmail\");",
+									"var password = pm.iterationData.get(\"defaultPassword\");",
+									"var repeatPassword = pm.iterationData.get(\"repeatPassword\");",
+									"",
+									"pm.test(\"The password has no letters\", function () {",
+									"    pm.expect(password).to.not.be.empty;",
+									"    pm.expect(password).to.match(/^[a-zA-Z0-9]|[a-zA-Z\\W]{0,7}$/);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{userFirstName}}\",\n    \"lastName\": \"{{userLastName}}\",\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{defaultPassword}}\",\n    \"repeatPassword\": \"{{repeatPassword}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/auth/signup",
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				},
+				{
+					"name": "Test repeat password does not match password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Passwords do not match\", function () {",
+									"    if (pm.response.code === 400) {",
+									"        pm.expect(jsonData.message).to.include(\"Passwords do not match\");",
+									"    }",
+									"    else{",
+									"        pm.execution.setNextRequest(\"Test Delete User\");",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var firstName = pm.iterationData.get(\"userFirstName\");",
+									"var lastName = pm.iterationData.get(\"userLastName\");",
+									"var email = pm.iterationData.get(\"userEmail\");",
+									"var password = pm.iterationData.get(\"defaultPassword\");",
+									"var repeatPassword = pm.iterationData.get(\"repeatPassword\");",
+									"",
+									"pm.test(\"The repeatPassword matches the password\", function () {",
+									"    pm.expect(repeatPassword).to.not.be.empty;",
+									"    pm.expect(repeatPassword).to.eql(password);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{userFirstName}}\",\n    \"lastName\": \"{{userLastName}}\",\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{defaultPassword}}\",\n    \"repeatPassword\": \"{{repeatPassword}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/auth/signup",
+						"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Signup JSON schema validation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Schema is valid\"), function () {",
+							"    pm.expect(ajv.validate(pm.response.json(), JSON.parse(pm.collectionVariables.get(\"schema_user_profile\")))).to.be.true;",
+							"};"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/users/profile",
+				"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signup' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Test Edit Users Profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User's first name data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    var userFirstName = pm.collectionVariables.get(\"userFirstName\")",
+							"    pm.expect(jsonData.data.name).to.eql(userFirstName);",
+							"});",
+							"pm.test(\"User's last name data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    var userLastName = pm.collectionVariables.get(\"userLastName\")",
+							"    pm.expect(jsonData.data.lastName).to.eql(userLastName);",
+							"});",
+							"pm.test(\"User's country data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    var usersCountry = pm.collectionVariables.get(\"country\")",
+							"    pm.expect(jsonData.data.country).to.eql(usersCountry);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var name = pm.variables.replaceIn(\"{{$randomFirstName}}\");",
+							"pm.collectionVariables.set(\"userFirstName\", name);",
+							"var lastName = pm.variables.replaceIn(\"{{$randomLastName}}\");",
+							"pm.collectionVariables.set(\"userLastName\", lastName);",
+							"pm.collectionVariables.set(\"country\", \"Ukraine\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"photo\": \"user-1621352948859.jpg\",\n    \"name\": \"{{userFirstName}}\",\n    \"lastName\": \"{{userLastName}}\",\n    \"dateBirth\": \"1985-03-17T15:21:05.000Z\",\n    \"country\": \"{{country}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/users/profile",
+				"description": "Generated from cURL: curl -X 'PUT' \\\n  'https://qauto.forstudy.space/api/users/profile' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"photo\": \"user-1621352948859.jpg\",\n  \"name\": \"John\",\n  \"lastName\": \"Dou\",\n  \"dateBirth\": \"2021-03-17T15:21:05.000Z\",\n  \"country\": \"Ukraine\"\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Test Change Password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User's id verification\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    var userId = pm.collectionVariables.get(\"userId\")",
+							"    pm.expect(jsonData.data.userId).to.eql(userId);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"oldPassword\": \"{{defaultPassword}}\",\n    \"password\": \"My_Password123\",\n    \"repeatPassword\": \"My_Password123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/users/password",
+				"description": "Generated from cURL: curl -X 'PUT' \\\n  'https://qauto.forstudy.space/api/users/password' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"oldPassword\": \"FooBar12345\",\n  \"password\": \"Qwerty12345\",\n  \"repeatPassword\": \"Qwerty12345\"\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Test Logout",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": "{{url}}/auth/logout",
+				"description": "Generated from cURL: curl -X 'GET' \\\n  'https://qauto.forstudy.space/api/auth/logout' \\\n  -H 'accept: application/json'"
+			},
+			"response": []
+		},
+		{
+			"name": "Test Signin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(pm.collectionVariables.get(\"userEmail\"));",
+							"console.log(pm.collectionVariables.get(\"defaultPassword\"));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"My_Password123\",\n    \"remember\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/auth/signin",
+				"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto.forstudy.space/api/auth/signin' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"email\": \"test@test.com\",\n  \"password\": \"Qwerty12345\",\n  \"remember\": false\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Test Create Car",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var carId = pm.response.json();",
+							"pm.collectionVariables.set(\"carId\", carId.data.id)",
+							"var carMileage = pm.response.json();",
+							"pm.collectionVariables.set(\"carMileage\", carMileage.data.mileage)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"carBrandId\": 1,\n  \"carModelId\": 1,\n  \"mileage\": 122\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/cars",
+				"description": "Generated from cURL: curl -X 'POST' \\\n  'https://qauto2.forstudy.space/api/cars' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"carBrandId\": 1,\n  \"carModelId\": 1,\n  \"mileage\": 122\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Test Edit Existing Car",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var carMileage = pm.response.json();",
+							"pm.collectionVariables.set(\"carMileage\", carMileage.data.mileage)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var newMiliage = parseInt(pm.variables.replaceIn(\"{{carMileage}}\")) + 10;",
+							"pm.collectionVariables.set(\"carMileage\", newMiliage);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"carBrandId\": 1,\n  \"carModelId\": 1,\n  \"mileage\": {{carMileage}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/cars/{{carId}}",
+				"description": "Generated from cURL: curl -X 'PUT' \\\n  'https://qauto2.forstudy.space/api/cars/1' \\\n  -H 'accept: application/json' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n  \"carBrandId\": 1,\n  \"carModelId\": 1,\n  \"mileage\": 168223\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Test Delete User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"",
+							"pm.test(\"User is deleted\", function () {",
+							"    if (pm.response.code === 200) {",
+							"        pm.expect(jsonData.status).to.include(\"ok\");",
+							"    }",
+							"    else if (pm.response.code === 401) {",
+							"        pm.expect(jsonData.message).to.include(\"Not authenticated\");",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": "{{url}}/users",
+				"description": "Generated from cURL: curl -X 'DELETE' \\\n  'https://qauto.forstudy.space/api/users' \\\n  -H 'accept: application/json'"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"var schema_user_profile = {",
+					"  \"type\": \"object\",",
+					"  \"properties\": {",
+					"    \"status\": {",
+					"      \"type\": \"string\"",
+					"    },",
+					"    \"data\": {",
+					"      \"type\": \"object\",",
+					"      \"properties\": {",
+					"        \"userId\": {",
+					"          \"type\": \"integer\"",
+					"        },",
+					"        \"photoFilename\": {",
+					"          \"type\": \"string\"",
+					"        },",
+					"        \"name\": {",
+					"          \"type\": \"string\"",
+					"        },",
+					"        \"lastName\": {",
+					"          \"type\": \"string\"",
+					"        }",
+					"      },",
+					"      \"required\": [",
+					"        \"userId\",",
+					"        \"photoFilename\",",
+					"        \"name\",",
+					"        \"lastName\"",
+					"      ]",
+					"    }",
+					"  },",
+					"  \"required\": [",
+					"    \"status\",",
+					"    \"data\"",
+					"  ]",
+					"}",
+					"",
+					"pm.collectionVariables.set(\"schema_user_profile\", JSON.stringify(schema_user_profile));"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "userEmail",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "defaultPassword",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "carId",
+			"value": ""
+		},
+		{
+			"key": "userFirstName",
+			"value": ""
+		},
+		{
+			"key": "userLastName",
+			"value": ""
+		},
+		{
+			"key": "country",
+			"value": ""
+		},
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "carMileage",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "schema_user_profile",
+			"value": ""
+		}
+	]
+}
